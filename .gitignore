@@ -1,0 +1,9 @@
+_site/
+.quarto/
+.pier/
+venv/
+scratch/
+__pycache__/
+*.pyc
+CLAUDE.md
+.DS_Store

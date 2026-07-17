@@ -1,0 +1,19 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Blind Neuron-Model Recovery — Asta Research Challenge"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Report
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: true
+    number-sections: true
+
+bibliography: references.bib
