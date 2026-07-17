@@ -9,7 +9,7 @@ Written by the solving agent immediately after finishing the run.
 | Skill | Role on this task | Worked? |
 |---|---|---|
 | `asta-assistant:run` | Router to bootstrap/drive the project via `project.md`. | Partially |
-| `asta-assistant` (brainstorm / plan-work / do-work / review-* / save-work) | The project state machine I was asked to drive with. | Partially — I opened `run`, `brainstorm`, `plan-work`, `do-work` (the review-/save-work skills I only saw named in the router's state table) and adopted the `project.md` + `work/<slug>/README.md` structure, but drove the actual work directly. |
+| `asta-assistant` (brainstorm / plan-work / do-work / review-* / save-work) | The project state machine I was asked to drive with. | Partially — I opened `run`, `brainstorm`, `plan-work`, `do-work` (the review-/save-work skills I never opened — only saw them referenced) and adopted the `project.md` + `work/<slug>/README.md` structure, but drove the actual work directly. |
 | `asta-tools:analyze-data` (DataVoyager) | Independent EDA / passive-parameter estimation on the four training CSVs. | Yes, as a cross-check — but returned an incomplete answer. |
 | `asta-dev:research-challenge` | This reflection. | Yes (as a router → `reflect`). |
 | `asta-tools:generate-theories`, `asta-tools:experiment`, `asta-tools:find-literature` | Suggested by the task. | **Not used** — see "Skills I skipped" below. |
@@ -24,8 +24,8 @@ submit/poll` just worked, uploads and background polling behaved exactly as the 
   cleanly onto the agent harness (no foreground blocking). Auth was invisible.
 - **DataVoyager as a corroboration tool.** Asked to estimate passive membrane parameters by
   regressing dV/dt on V and I, it independently reproduced my passive estimates closely — capacitance
-  near-exactly (its C = 86 / 73 / 72 / 63 pF vs my 90 / 74 / 73 / 62 pF) and the time constant in the
-  same range (its τ_m = 8.4 / 6.0 / 6.6 / 9.9 ms vs my 10.1 / 5.9 / 6.6 / 7.7 ms) — and confirmed
+  to within ~1–4 pF (its C = 86 / 73 / 72 / 63 pF vs my 90 / 74 / 73 / 62 pF) and the time constant in
+  the same range (its τ_m = 8.4 / 6.0 / 6.6 / 9.9 ms vs my 10.1 / 5.9 / 6.6 / 7.7 ms) — and confirmed
   low-pass behavior via I→V cross-correlation lags. That independent agreement genuinely increased my
   confidence in the membrane fit.
 - **The `asta-assistant` artifact convention.** `project.md` (Goal / Background / Completed /
@@ -43,7 +43,8 @@ submit/poll` just worked, uploads and background polling behaved exactly as the 
    interviews/approvals disabled there is no reviewer, so I skipped straight past those gates — I
    authored `project.md` and the work READMEs myself, drove the work directly, and reconciled the
    READMEs afterward. **The key point is that skipping caused no problems: the entire project ran to
-   completion without the skills ever needing to ask the user anything.** So the issue isn't that the
+   completion without the skills ever needing to ask the user anything** (the user volunteered some
+   guidance mid-run — e.g. the grading metric — but no skill ever prompted for it). So the issue isn't that the
    gates are "bad" — it's that a non-interactive skip is safe and effective, and should be a supported
    first-class mode rather than something the agent has to route around.
 
