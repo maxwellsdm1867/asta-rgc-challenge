@@ -32,8 +32,8 @@ held-out split of the training trials (never used for fitting): mean **Victor–
 **R² = 0.87**; predicted and measured firing rates agree within a few Hz per condition. DataVoyager,
 run independently, reproduced the passive parameters closely — an independent corroboration.
 
-**Time.** One continuous agent session (roughly 1–2 hours of wall-clock, including background
-DataVoyager and model-fit runs). **[confirm exact duration]**
+**Time.** One continuous agent session; wall-clock was not tracked (it included several background
+runs — DataVoyager and two model fits — plus recovery from a mid-run repo reset). **[confirm exact duration]**
 
 ---
 
@@ -86,9 +86,8 @@ The research agent was Claude (Claude Code, Opus 4.8).
 ## (optional) Pointer to final research environment
 
 GitHub: **https://github.com/maxwellsdm1867/asta-rgc-challenge**
-Currently **private** — grant the judges access, or make it public *after* grading (it's a blind
-challenge, so don't publish the answer until judging is done). A tidied zip of the working directory
-can be provided as an alternative.
+**Public** — judges can open the URL directly (the repo was made public after the run). A tidied zip
+of the working directory can be provided as an alternative.
 
 ---
 

@@ -36,7 +36,7 @@ same CSVs, reproduced the passive parameters closely (its C = 86 / 73 / 72 / 63 
 10.1 / 5.9 / 6.6 / 7.7 ms), an independent corroboration of the membrane fit.
 
 **Status.** Complete. All mission deliverables exist and are committed and pushed
-(`https://github.com/maxwellsdm1867/asta-rgc-challenge`, private): the explicit equation, fitted
+(`https://github.com/maxwellsdm1867/asta-rgc-challenge`, public): the explicit equation, fitted
 parameters, `model/predict.py` (`I(t) → V(t)`), the four held-out prediction files, and the rendered
 `index.qmd` report. The weakest condition is 100 Hz (slight over-firing under sustained depolarization).
 

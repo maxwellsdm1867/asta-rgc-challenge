@@ -119,7 +119,7 @@ I did **not** assume the model form; three model-free views of the data selected
 spike-initiation elbow.](figures/fig_ivcurve.png)
 
 The passive parameters were **consistent across all four bandwidth conditions** (per-condition
-$\tau_m$ = 6–10 ms, $C$ = 62–86 pF, $E_L$ ≈ −65 mV), confirming a single cell and justifying one
+$\tau_m$ = 6–10 ms, $C$ = 62–90 pF, $E_L$ ≈ −65 mV), confirming a single cell and justifying one
 shared equation. An independent DataVoyager pass on the same CSVs reproduced these passive estimates
 (e.g. $\tau_m$ = 8.4 / 6.0 / 6.6 / 9.9 ms, $C$ = 86 / 73 / 72 / 63 pF), corroborating the fit.
 
