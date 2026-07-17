@@ -1,8 +1,199 @@
 ---
-title: "Neuron Model Recovery"
+title: "Blind Neuron-Model Recovery — a Generalized Integrate-and-Fire equation for V(t)"
+author: "Asta Research Challenge"
 date: today
+bibliography: references.bib
 ---
 
-# Report
+## Summary
 
-_Written by the research agent._
+Given only the injected current `I(t)` and the recorded membrane potential `V(t)` of a **single
+neuron** (four stimulus conditions differing in current bandwidth, 25/100/200/400 Hz), I recovered
+an explicit equation for `V(t)` and validated it on held-out trials. The data point unambiguously to
+a **Generalized Integrate-and-Fire (GIF / GLIF) model** [@gerstner2014neuronal; @mensi2012parameter;
+@teeter2018generalized]: a linear leaky membrane driven by `I(t)`, plus a spike-triggered adaptation
+current, a spike-triggered (dynamic) threshold, and a reset. One parameter set fits all four
+conditions.
+
+On a held-out split of the training trials (20 %, never used for fitting), the model reproduces the
+subthreshold voltage with **RMSE ≈ 2.5 mV** (subthreshold R² ≈ 0.87) and predicts spike times with a
+**Victor–Purpura distance (q = 4 s⁻¹) of ≈ 2.9 per second** and a coincidence factor **Γ ≈ 0.69**
+(±2 ms). Predicted and measured firing rates agree to within a few Hz in every condition.
+
+![Held-out prediction (one unseen trial per condition): measured (grey) vs. GIF-predicted
+(colour) membrane potential, with spike-initiation marks above.](figures/fig_predictions.png)
+
+---
+
+## 1. The equation
+
+**Subthreshold membrane** — a single-compartment leaky integrator driven by the injected current,
+with a spike-triggered adaptation current $I_\text{adapt}$:
+
+$$
+C\,\frac{dV}{dt} \;=\; -\,g_L\,(V - E_L)\;+\;I(t)\;-\;I_\text{adapt}(t),
+\qquad
+I_\text{adapt}(t)=\sum_{k} w_k\, z_k(t).
+$$
+
+Each adaptation state $z_k$ is a leaky integrator of the spike train that decays with time constant
+$\tau_k$ and jumps by 1 at every spike time $\hat t$:
+
+$$
+\tau_k \frac{dz_k}{dt} = -z_k,\qquad z_k \to z_k+1 \ \text{at each spike}
+\quad\Longleftrightarrow\quad
+z_k(t)=\sum_{\hat t < t} e^{-(t-\hat t)/\tau_k}.
+$$
+
+**Spike generation with a dynamic threshold** — a spike is emitted at time $\hat t$ when the voltage
+reaches a threshold that itself rises after each spike (accommodation / refractoriness):
+
+$$
+\text{spike when}\quad V(t)\ge V_T(t),
+\qquad
+V_T(t)=V_{T0}+a_\theta\,\theta(t),
+\qquad
+\tau_\theta \frac{d\theta}{dt}=-\theta,\ \ \theta\to\theta+1 \ \text{at each spike}.
+$$
+
+**Reset / refractoriness** — immediately after a spike, $V\to V_r$ and is held for a refractory
+period $t_\text{ref}$; the states $z_k$ and $\theta$ each increment by 1.
+
+For visualization/scoring, the returned trace pastes a **stereotyped action-potential waveform** (the
+training spike-triggered average) at each spike time; this affects only the ~3 ms around each spike.
+
+**Symbols.** $V$ membrane potential (mV); $I(t)$ injected current (pA); $C$ capacitance (pF);
+$g_L$ leak conductance (nS), $R=1/g_L$; $E_L$ leak/resting potential (mV); $\tau_m=C/g_L$ membrane
+time constant; $w_k,\tau_k$ amplitudes/time-constants of the adaptation current (pA, ms); $V_{T0}$
+baseline threshold (mV); $a_\theta,\tau_\theta$ threshold jump/decay (mV, ms); $V_r$ reset (mV);
+$t_\text{ref}$ refractory period (ms).
+
+This is the GIF model of @mensi2012parameter and @pozzorini2015automated, i.e. an Allen-Institute-style
+GLIF with a spike-triggered current and an adaptive threshold [@teeter2018generalized].
+
+## 2. Fitted parameters (this cell)
+
+| quantity | symbol | value | unit |
+|---|---|---:|---|
+| capacitance | $C$ | **66.3** | pF |
+| leak conductance | $g_L$ | **9.88** | nS |
+| input resistance | $R=1/g_L$ | **101** | MΩ |
+| membrane time constant | $\tau_m=C/g_L$ | **6.71** | ms |
+| leak / resting potential | $E_L$ | **−65.2** | mV |
+| baseline threshold | $V_{T0}$ | **−55.3** | mV |
+| threshold jump | $a_\theta$ | **4.12** | mV |
+| threshold time constant | $\tau_\theta$ | **30.5** | ms |
+| reset potential | $V_r$ | **−61.8** | mV |
+| refractory period | $t_\text{ref}$ | **3.45** | ms |
+
+Spike-triggered **adaptation current** $I_\text{adapt}(t)=\sum_k w_k e^{-t/\tau_k}$ (per spike):
+
+| $\tau_k$ (ms) | 3 | 10 | 30 | 100 | 300 |
+|---|---:|---:|---:|---:|---:|
+| $w_k$ (pA) | 35.0 | −11.9 | 23.3 | −3.4 | 0.22 |
+
+The net $I_\text{adapt}$ is a **hyperpolarising** current of ≈ 47 pA immediately after a spike that
+decays over tens of ms (see figure below) — a spike-frequency-adaptation / after-hyperpolarisation
+current. Values are physiologically typical for a cortical neuron.
+
+![Fitted spike-triggered adaptation current, dynamic threshold recovery, and the stereotyped AP
+waveform.](figures/fig_kernels.png)
+
+## 3. How the equation was found (data → model)
+
+I did **not** assume the model form; three model-free views of the data selected it
+(`work/explore-data/`):
+
+1. **Dynamic I–V curve** [@badel2008dynamic]. Plotting the net ionic current $I-C\,\dot V$ against
+   $V$ over subthreshold samples gives a **straight line** that crosses zero at $E_L\approx-65$ mV
+   for $V\lesssim-50$ mV, then turns sharply inward above ≈ −55 mV. A straight subthreshold I–V *is*
+   a linear leak; the sharp upturn is the regenerative (Na⁺) spike current. → leaky membrane + a
+   voltage threshold.
+2. **Phase plot** ($\dot V$ vs $V$). A sharp spike-initiation "elbow" near −55 mV and a stereotyped
+   AP loop → threshold + reset + a fixed AP waveform, rather than a continuous nonlinearity.
+3. **Spike-triggered average.** A reset to ≈ −60 mV followed by a slow after-hyperpolarisation and
+   spike-frequency adaptation → a spike-triggered adaptation current $I_\text{adapt}$ and a moving
+   threshold.
+
+![Left: dynamic I–V curve (200 Hz) — linear leak (red) plus spike onset. Right: phase-plane
+spike-initiation elbow.](figures/fig_ivcurve.png)
+
+The passive parameters were **consistent across all four bandwidth conditions** (per-condition
+$\tau_m$ = 6–10 ms, $C$ = 62–86 pF, $E_L$ ≈ −65 mV), confirming a single cell and justifying one
+shared equation. An independent DataVoyager pass on the same CSVs reproduced these passive estimates
+(e.g. $\tau_m$ = 8.4 / 6.0 / 6.6 / 9.9 ms, $C$ = 86 / 73 / 72 / 63 pF), corroborating the fit.
+
+### Fitting method
+
+- **Membrane + adaptation current** by *linear regression*: over subthreshold samples (excluding a
+  4 ms window around each spike and $V>-40$ mV), regress $\dot V$ on $[\,V,\,1,\,I,\,z_1..z_5\,]$.
+  The coefficients give $C,g_L,E_L$ and the adaptation weights $w_k$ in one closed-form step (the
+  Badel/Mensi/Pozzorini estimator [@badel2008dynamic; @pozzorini2015automated]). No forward
+  simulation is needed for this part, so it is robust.
+- **Spike-generation parameters** ($V_{T0},a_\theta,\tau_\theta,V_r,t_\text{ref}$, and an overall
+  adaptation scale) by direct search (Nelder–Mead, multi-start) that **minimises the Victor–Purpura
+  spike distance** ($q=4\,\mathrm{s^{-1}}$) between model and data, pooled across the four conditions.
+- **Spikes** are detected with an **elbow (v2) method**: the AP-initiation point is the "kink" where
+  the Na⁺ current engages, located as the maximum of the second derivative $d^2V/dt^2$ on the rising
+  phase [@sekerli2004estimating]. The identical detector is applied to measured and predicted traces
+  when scoring.
+
+## 4. Held-out performance
+
+Metrics are computed on a **20 % held-out split of the training trials** (random, seed-fixed, never
+used for fitting), per condition. VP is the Victor–Purpura distance per second; Γ is the coincidence
+factor at ±2 ms [@jolivet2008benchmark]; subthreshold RMSE/R² exclude a window around every spike.
+
+| condition | VP dist / s (q=4) | Γ (±2 ms) | subthr. RMSE (mV) | subthr. R² | rate meas/pred (Hz) |
+|---|---:|---:|---:|---:|---:|
+| 25 Hz  | 2.63 | 0.642 | 2.23 | 0.875 | 25.0 / 24.1 |
+| 100 Hz | 4.45 | 0.564 | 3.11 | 0.860 | 41.4 / 45.4 |
+| 200 Hz | 2.37 | 0.807 | 1.94 | 0.886 | 34.3 / 34.3 |
+| 400 Hz | 2.21 | 0.751 | 2.64 | 0.870 | 40.0 / 40.3 |
+| **mean** | **2.91** | **0.691** | **2.48** | **0.873** | — |
+
+![Left: per-trial predicted vs. measured firing rate (held-out). Right: VP distance across the
+precision parameter q; the dotted line marks the grading value q = 4.](figures/fig_metrics.png)
+
+The **held-out predictions for the mission's input-only files** are written to
+`predictions/pred_cond{25,100,200,400}Hz.csv.gz` (`trial_id, t_s, voltage_mV`, one row per input
+sample) by `python model/predict.py`.
+
+## 5. Where it fails / limitations
+
+- **100 Hz** is the weakest condition (VP/s = 4.4, Γ = 0.56): the model slightly **over-fires**
+  (41→45 Hz). This condition has the largest mean holding current and the model's fixed reset makes
+  it a touch too excitable in sustained depolarisations.
+- **Exact spike timing** cannot be recovered to <1–2 ms: near threshold a small voltage error moves a
+  spike by several ms, and the trials are frozen-noise-free (every trial is a *different* current, so
+  there is no repeat-reliability ceiling to approach). This is intrinsic to any deterministic
+  threshold model; a stochastic-threshold GIF would trade a reproducible trace for better timing
+  statistics.
+- **Startup transient.** Each trial is initialised at $E_L$ (no pre-stimulus history is given for the
+  held-out inputs), so the first ~20–30 ms can show a small relaxation transient.
+- **AHP depth** on very strong hyperpolarising currents (400 Hz) can overshoot the data by a few mV,
+  because the leak is strictly linear.
+
+## 6. Data vs. prior knowledge
+
+**From the data (this cell):** the model *form* (linear leak + threshold + reset + adaptation) was
+selected from the dynamic I–V curve, phase plot, and spike-triggered average; and **all numeric
+parameters** were fit to `data/` only. **From prior knowledge:** the GIF/GLIF framework and its
+regression fitting protocol [@mensi2012parameter; @pozzorini2015automated; @badel2008dynamic;
+@teeter2018generalized], the Victor–Purpura metric [@victor1996nature], the coincidence factor
+[@jolivet2008benchmark], and the second-derivative "elbow" spike-onset detector
+[@sekerli2004estimating]. No external cell/answer was used.
+
+## 7. Reproducing this
+
+```bash
+python3 -m venv venv && source venv/bin/activate
+pip install "numpy<2" "pandas>=2" scipy matplotlib numba   # numba optional (speeds the fit)
+
+python model/glif_fit.py             # refit -> model/params.json, model/heldout_metrics.json
+python model/predict.py              # write predictions/pred_cond*.csv.gz
+python model/make_report_figures.py  # regenerate figures/
+```
+
+`model/predict.py` exposes the required predictor: `predict_voltage(current_pA) -> voltage_mV`
+for one trial (state reset per trial). `model/params.json` holds the fitted equation.

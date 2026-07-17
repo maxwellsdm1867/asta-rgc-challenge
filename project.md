@@ -23,10 +23,12 @@ held-out metrics.
 
 # Completed Work
 
+- [explore-data](work/explore-data/README.md) — characterized I(t)/V(t): passive params (C≈66 pF, R≈101 MΩ, τ_m≈6.7 ms, E_L≈−65 mV), spike stats (V_th≈−48 mV, 25–42 Hz), dynamic I–V + phase plot; cross-checked with DataVoyager.
+- [derive-equation](work/derive-equation/README.md) — selected the Generalized Integrate-and-Fire (GIF/GLIF) form from the data (linear leak + threshold + reset + spike-triggered adaptation).
+- [fit-model](work/fit-model/README.md) — fit one GIF across all four conditions (regression for membrane+adaptation; VP@q=4 optimization for spike params). Held-out: mean VP@q4/s=2.91, Γ=0.69, subthreshold RMSE=2.48 mV.
+- [predict-heldout](work/predict-heldout/README.md) — built `model/predict.py` (I→V) and wrote `predictions/pred_cond{25,100,200,400}Hz.csv.gz`.
+- [write-report](work/write-report/README.md) — wrote and rendered `index.qmd` (equation, params, per-condition held-out metrics, failure modes) + `references.bib`.
+
 # Pending Work
 
-- [explore-data](work/explore-data/README.md) (status: ready) — characterize I(t)/V(t): subthreshold I–V, spike statistics, membrane time constant, post-spike dynamics across the four conditions.
-- [derive-equation](work/derive-equation/README.md) (status: pending-plan) — enumerate candidate governing equations and select the model form (GLIF-family) from the data.
-- [fit-model](work/fit-model/README.md) (status: pending-plan) — fit one model's parameters across all conditions (subthreshold membrane filter + spike-triggered current + threshold/reset), on a train split.
-- [predict-heldout](work/predict-heldout/README.md) (status: pending-plan) — build `model/predict.py` and write `predictions/pred_cond*.csv.gz` for the held-out inputs.
-- [write-report](work/write-report/README.md) (status: pending-plan) — write `index.qmd`: the equation, method, fitted params, per-condition held-out metrics, and failure modes.
+_All mission deliverables complete. Remaining: SKILLS_FEEDBACK.md (reflection on the Asta skills)._
