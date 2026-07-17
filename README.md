@@ -1,13 +1,19 @@
-# Blind neuron-model recovery
+<div align="center">
 
-Recover an explicit equation for one neuron's membrane potential `V(t)` from an injected current
-`I(t)` (four current-bandwidth conditions, same cell), fit it, and predict held-out inputs. Task
-spec: [`mission.md`](mission.md).
+# 🧠 Blind neuron-model recovery
 
-**Rendered pages** (GitHub Pages): **[report](https://maxwellsdm1867.github.io/asta-rgc-challenge/report.html)**
-· **[one-page visual brief](https://maxwellsdm1867.github.io/asta-rgc-challenge/brief.html)** ·
-[landing](https://maxwellsdm1867.github.io/asta-rgc-challenge/). *(The `.html` files in this repo show
-raw source when clicked on GitHub; these links serve them rendered.)*
+An explicit **Generalized Integrate-and-Fire** equation for one neuron's membrane potential **V(t)**,
+recovered from injected current `I(t)` and validated on held-out data — four bandwidth conditions, one cell.
+
+### [▶&nbsp; Report](https://maxwellsdm1867.github.io/asta-rgc-challenge/report.html) &nbsp;·&nbsp; [▶&nbsp; Visual brief](https://maxwellsdm1867.github.io/asta-rgc-challenge/brief.html) &nbsp;·&nbsp; [Live site](https://maxwellsdm1867.github.io/asta-rgc-challenge/)
+
+<img src="figures/fig_predictions.png" alt="Measured vs. GIF-predicted membrane potential across four conditions" width="840">
+
+<sub>Held-out prediction — measured (grey) vs. GIF-predicted (colour) membrane potential across the four conditions. &nbsp;·&nbsp; Task spec: <a href="mission.md"><code>mission.md</code></a></sub>
+
+</div>
+
+---
 
 > **Results in one line** *(skip if you just want the files)* — the answer is a **Generalized
 > Integrate-and-Fire (GIF)** model; held-out **Victor–Purpura distance = 2.91 / s (q = 4)**,
