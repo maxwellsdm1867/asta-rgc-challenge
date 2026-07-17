@@ -85,9 +85,10 @@ A candid, tools-only reflection with concrete per-skill improvement suggestions 
 ## Suggested skill improvements
 
 ### `asta-assistant:run` / `brainstorm`
-- **Observation:** the only path to a first `project.md` is a conversational `brainstorm` that blocks
-  on approval, and `plan-work`/`do-work` are gated by `review-*` loops that assume a reviewer;
-  skipping them autonomously worked cleanly here (the run finished with no user prompts).
+- **Observation:** the only *skill-provided* way to bootstrap `project.md` is a conversational
+  `brainstorm` that blocks on approval (the agent can also just write `project.md` directly, which I
+  did), and `plan-work`/`do-work` are gated by `review-*` loops that assume a reviewer; skipping the
+  gates autonomously worked cleanly here (the run finished with no user prompts).
 - **Suggested change:** a non-interactive bootstrap (`run --autonomous` / `brainstorm --from-context`)
   that drafts `project.md` from the mission file, and an autonomous profile that collapses
   plan → do → review when no reviewer is present.

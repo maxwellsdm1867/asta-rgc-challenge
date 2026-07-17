@@ -36,8 +36,9 @@ submit/poll` just worked, uploads and background polling behaved exactly as the 
 ## What was clunky, slow, or incomplete
 
 1. **The `asta-assistant` loop assumes a human in the loop; an autonomous run has to skip the gates.**
-   `run` requires a pre-existing `project.md`; the only bootstrap is `brainstorm`, which is explicitly
-   conversational ("Confirm before writing… wait for explicit approval"). `plan-work` → `review-plan`
+   `run` requires a pre-existing `project.md`; the only *skill-provided* bootstrap is `brainstorm`,
+   which is explicitly conversational ("Confirm before writing… wait for explicit approval") — though
+   the agent can just write `project.md` directly (I did), and `run` then proceeds. `plan-work` → `review-plan`
    and `do-work` → `review-work` are gated review loops that assume a reviewer. With
    interviews/approvals disabled there is no reviewer, so I skipped straight past those gates — I
    authored `project.md` and the work READMEs myself, drove the work directly, and reconciled the
@@ -90,8 +91,10 @@ submit/poll` just worked, uploads and background polling behaved exactly as the 
 ## Concrete suggestions
 
 ### `asta-assistant:run` / `brainstorm`
-- **Observation:** the only path to a first `project.md` is a conversational `brainstorm`, which
-  blocks on approval; `run` can't start without it.
+- **Observation:** `run` needs `project.md` to exist, and the only *skill-provided* way to bootstrap
+  it is the conversational `brainstorm` (which blocks on approval). It is not a hard blocker, though —
+  nothing stops the agent from writing `project.md` directly, which is exactly what I did, after which
+  `run` proceeds normally. The friction is that the intended/documented bootstrap path is interactive.
 - **Suggested change:** add a non-interactive bootstrap (e.g. `run --autonomous` or
   `brainstorm --from-context`) that drafts `project.md` from the mission file + current context and
   proceeds, and an "autonomous profile" that collapses `plan → do → review` into a single pass when
