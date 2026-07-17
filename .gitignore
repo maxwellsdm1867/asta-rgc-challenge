@@ -7,3 +7,6 @@ __pycache__/
 *.pyc
 CLAUDE.md
 .DS_Store
+
+/.quarto/
+**/*.quarto_ipynb
