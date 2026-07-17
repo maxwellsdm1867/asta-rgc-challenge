@@ -4,12 +4,19 @@ An honest reflection on how the **Asta Skills** performed while I solved this ch
 about the *tools and the experience*, not the science, and it is not compared against anything else.
 Written by the solving agent immediately after finishing the run.
 
+> **Grounding & citations.** Every claim below is cite-checked against this session's actual tool
+> calls in [`FEEDBACK_AUDIT.md`](FEEDBACK_AUDIT.md), which **numbers each claim** and quotes the exact
+> output that backs it. That check found **0 unsupported/fabricated** claims and **2 initially
+> overstated** ones — **audit rows 4 and 9** — which have since been corrected (each is tagged inline
+> below with its audit row). The raw, untouched session (every tool call and output the audit quotes)
+> is in [`trace.tar.gz`](trace.tar.gz).
+
 ## What I actually invoked
 
 | Skill | Role on this task | Worked? |
 |---|---|---|
 | `asta-assistant:run` | Router to bootstrap/drive the project via `project.md`. | Partially |
-| `asta-assistant` (brainstorm / plan-work / do-work / review-* / save-work) | The project state machine I was asked to drive with. | Partially — I opened `run`, `brainstorm`, `plan-work`, `do-work` (the review-/save-work skills I never opened — only saw them referenced) and adopted the `project.md` + `work/<slug>/README.md` structure, but drove the actual work directly. |
+| `asta-assistant` (brainstorm / plan-work / do-work / review-* / save-work) | The project state machine I was asked to drive with. | Partially — I opened `run`, `brainstorm`, `plan-work`, `do-work` (the review-/save-work skills I never opened — only saw them referenced; *corrected — audit row 4*) and adopted the `project.md` + `work/<slug>/README.md` structure, but drove the actual work directly. |
 | `asta-tools:analyze-data` (DataVoyager) | Independent EDA / passive-parameter estimation on the four training CSVs. | Yes, as a cross-check — but returned an incomplete answer. |
 | `asta-dev:research-challenge` | This reflection. | Yes (as a router → `reflect`). |
 | `asta-tools:generate-theories`, `asta-tools:experiment`, `asta-tools:find-literature` | Suggested by the task. | **Not used** — see "Skills I skipped" below. |
@@ -24,7 +31,8 @@ submit/poll` just worked, uploads and background polling behaved exactly as the 
   cleanly onto the agent harness (no foreground blocking). Auth was invisible.
 - **DataVoyager as a corroboration tool.** Asked to estimate passive membrane parameters by
   regressing dV/dt on V and I, it independently reproduced my passive estimates closely — capacitance
-  to within ~1–4 pF (its C = 86 / 73 / 72 / 63 pF vs my 90 / 74 / 73 / 62 pF) and the time constant in
+  to within ~1–4 pF *(corrected; was "near-exactly" — audit row 9)* (its C = 86 / 73 / 72 / 63 pF vs
+  my 90 / 74 / 73 / 62 pF) and the time constant in
   the same range (its τ_m = 8.4 / 6.0 / 6.6 / 9.9 ms vs my 10.1 / 5.9 / 6.6 / 7.7 ms) — and confirmed
   low-pass behavior via I→V cross-correlation lags. That independent agreement genuinely increased my
   confidence in the membrane fit.

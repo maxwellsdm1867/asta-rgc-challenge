@@ -1,9 +1,11 @@
 # FEEDBACK_AUDIT — grounding of SKILLS_FEEDBACK.md against the actual session
 
-Each claim in `SKILLS_FEEDBACK.md` is checked against **this conversation's** tool calls and outputs
-(not the repo files). Verdicts: **GROUNDED** (an event/output I can cite), **DOC** (grounded, but as
-my reading of a skill's `SKILL.md` text rather than an event), **OVERSTATED** (some basis, wording
-claims more), **UNSUPPORTED** (no evidence it happened).
+Each claim in [`SKILLS_FEEDBACK.md`](SKILLS_FEEDBACK.md) is checked against **this conversation's**
+tool calls and outputs (not the repo files). Verdicts: **GROUNDED** (an event/output I can cite),
+**DOC** (grounded, but as my reading of a skill's `SKILL.md` text rather than an event),
+**OVERSTATED** (some basis, wording claims more), **UNSUPPORTED** (no evidence it happened). The two
+items initially flagged OVERSTATED are **rows 4 and 9** (both since corrected — see Resolution). The
+raw session these snippets are quoted from is in [`trace.tar.gz`](trace.tar.gz).
 
 | # | Claim | Verdict | Evidence in this conversation (tool call → quoted snippet) |
 |---|---|---|---|
