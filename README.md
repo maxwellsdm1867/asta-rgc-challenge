@@ -4,6 +4,11 @@ Recover an explicit equation for one neuron's membrane potential `V(t)` from an 
 `I(t)` (four current-bandwidth conditions, same cell), fit it, and predict held-out inputs. Task
 spec: [`mission.md`](mission.md).
 
+**Rendered pages** (GitHub Pages): **[report](https://maxwellsdm1867.github.io/asta-rgc-challenge/report.html)**
+· **[one-page visual brief](https://maxwellsdm1867.github.io/asta-rgc-challenge/brief.html)** ·
+[landing](https://maxwellsdm1867.github.io/asta-rgc-challenge/). *(The `.html` files in this repo show
+raw source when clicked on GitHub; these links serve them rendered.)*
+
 > **Results in one line** *(skip if you just want the files)* — the answer is a **Generalized
 > Integrate-and-Fire (GIF)** model; held-out **Victor–Purpura distance = 2.91 / s (q = 4)**,
 > subthreshold **R² = 0.87**. The full equation, fitted parameters, and per-condition metrics live in

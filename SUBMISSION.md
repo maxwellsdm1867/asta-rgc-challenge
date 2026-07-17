@@ -78,10 +78,12 @@ The research agent was Claude (Claude Code, Opus 4.8).
 - **`trace.tar.gz`** — the **full conversation trajectory** (pier-captured; the structured format the
   challenge accepts, including the agent's reasoning and tool usage at each step). ~11 MB; committed
   at the repo root — **upload this with the entry**.
-- `index.qmd` — the full written report (renders to `_site/index.html` with Quarto): the equation,
-  data→model derivation, fitted parameters, and per-condition held-out metrics.
-- `brief.html` — a one-page visual science brief (inline SVG, self-contained). Also viewable as an
-  Artifact: https://claude.ai/code/artifact/a97d1da4-61a2-42d9-a248-79aaab487a62
+- **Rendered report** (GitHub Pages): https://maxwellsdm1867.github.io/asta-rgc-challenge/report.html
+  — the equation, data→model derivation, fitted parameters, and per-condition held-out metrics.
+  (Source: `index.qmd`.)
+- **Rendered visual brief** (GitHub Pages): https://maxwellsdm1867.github.io/asta-rgc-challenge/brief.html
+  — one-page, inline-SVG traces from a real held-out trial. (Source: `brief.html`; also an Artifact:
+  https://claude.ai/code/artifact/a97d1da4-61a2-42d9-a248-79aaab487a62)
 - `SKILLS_FEEDBACK.md` — tools-only reflection on the Asta skills, with per-claim citations in
   `FEEDBACK_AUDIT.md` (each claim traced to the exact moment in `trace.tar.gz`).
 
@@ -89,9 +91,9 @@ The research agent was Claude (Claude Code, Opus 4.8).
 
 ## (optional) Pointer to final research environment
 
-GitHub: **https://github.com/maxwellsdm1867/asta-rgc-challenge**
-**Public** — judges can open the URL directly (the repo was made public after the run). A tidied zip
-of the working directory can be provided as an alternative.
+GitHub: **https://github.com/maxwellsdm1867/asta-rgc-challenge** (public) ·
+rendered pages: **https://maxwellsdm1867.github.io/asta-rgc-challenge/**
+Judges can open either directly. A tidied zip of the working directory can be provided as an alternative.
 
 ---
 
