@@ -75,7 +75,9 @@ Add `venv/` (and any `scratch/`) to `.gitignore`.
 Check every deliverable the mission asks for actually exists and is correct (e.g. an explicit
 equation + fitted parameters, a runnable `predict.py`, prediction files with the right schema/row
 counts, the report, references). Re-run the predictor on a fresh input to confirm it works
-end-to-end, not just that files exist.
+end-to-end, not just that files exist. **Watch out:** re-running the predictor often overwrites the
+committed prediction files — write to a temp path, or `git checkout` them back and delete any stray
+`__pycache__`, so you verify without dirtying the tree.
 
 **Then commit them.** A maintainer `git clean`/reset can wipe anything untracked or gitignored
 mid-run — this actually happens. Deliverables and any code you want to survive must live in the
@@ -118,11 +120,23 @@ in this session. Tell it to:
   UNSUPPORTED,
 - write the citation table to `FEEDBACK_AUDIT.md`, and report every OVERSTATED/UNSUPPORTED item.
 
+**Not in the original session?** If you're wrapping up later or from notes/a trace, a fork adds
+nothing — it would only inherit *this* wrap-up session, which never saw the research. In that case
+audit against the **captured `trace.tar.gz` transcript** (or the run's notes) as the record — still
+the real thing, just read from disk. **Never fall back to your own memory** — that's the exact source
+of the hallucination this phase exists to catch. State in the audit which source you used.
+
 Then **fix** the flagged claims in `SKILLS_FEEDBACK.md`, and add a short Resolution note to the
 audit. Cross-link the two by claim number so a reader can trace feedback → citation → raw source.
 See `references/grounding.md` for a ready-to-use fork prompt.
 
 ## 5. Capture the conversation trace → `trace.tar.gz`
+
+**Critical: the trace can only come from the ORIGINAL research session's transcript.** If you're
+wrapping up in a fresh/later session, running the helper here captures *this* wrap-up session — not
+the research — which is worthless as evidence. So capture the trace from the run that did the work
+(that's the main reason to wrap up in-session); if you can't, mark `trace.tar.gz` as `[confirm]` in
+`SUBMISSION.md`, to be generated from the original session, and don't ship a wrong-session trace.
 
 The challenge accepts a structured trajectory (every tool call + the agent's reasoning). Generate it
 with the bundled helper (it wraps `pier capture` + `pier traces`):
