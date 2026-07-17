@@ -9,7 +9,7 @@ Written by the solving agent immediately after finishing the run.
 | Skill | Role on this task | Worked? |
 |---|---|---|
 | `asta-assistant:run` | Router to bootstrap/drive the project via `project.md`. | Partially |
-| `asta-assistant` (brainstorm / plan-work / do-work / review-* / save-work) | The project state machine I was asked to drive with. | Partially — I read them and adopted the `project.md` + `work/<slug>/README.md` structure, but drove the actual work directly. |
+| `asta-assistant` (brainstorm / plan-work / do-work / review-* / save-work) | The project state machine I was asked to drive with. | Partially — I opened `run`, `brainstorm`, `plan-work`, `do-work` (the review-/save-work skills I only saw named in the router's state table) and adopted the `project.md` + `work/<slug>/README.md` structure, but drove the actual work directly. |
 | `asta-tools:analyze-data` (DataVoyager) | Independent EDA / passive-parameter estimation on the four training CSVs. | Yes, as a cross-check — but returned an incomplete answer. |
 | `asta-dev:research-challenge` | This reflection. | Yes (as a router → `reflect`). |
 | `asta-tools:generate-theories`, `asta-tools:experiment`, `asta-tools:find-literature` | Suggested by the task. | **Not used** — see "Skills I skipped" below. |
@@ -23,10 +23,11 @@ submit/poll` just worked, uploads and background polling behaved exactly as the 
   gzipped CSVs, and the backgrounded `poll` subcommand exited on completion and pinged me. This maps
   cleanly onto the agent harness (no foreground blocking). Auth was invisible.
 - **DataVoyager as a corroboration tool.** Asked to estimate passive membrane parameters by
-  regressing dV/dt on V and I, it independently reproduced my own fit almost exactly (τ_m = 8.4 / 6.0
-  / 6.6 / 9.9 ms; C = 86 / 73 / 72 / 63 pF across conditions) and confirmed low-pass behavior via
-  I→V cross-correlation lags. That independent agreement genuinely increased my confidence in the
-  membrane fit.
+  regressing dV/dt on V and I, it independently reproduced my passive estimates closely — capacitance
+  near-exactly (its C = 86 / 73 / 72 / 63 pF vs my 90 / 74 / 73 / 62 pF) and the time constant in the
+  same range (its τ_m = 8.4 / 6.0 / 6.6 / 9.9 ms vs my 10.1 / 5.9 / 6.6 / 7.7 ms) — and confirmed
+  low-pass behavior via I→V cross-correlation lags. That independent agreement genuinely increased my
+  confidence in the membrane fit.
 - **The `asta-assistant` artifact convention.** `project.md` (Goal / Background / Completed /
   Pending) plus `work/<slug>/README.md` (Goal / Instructions / Results / Assessment) is a tidy,
   legible way to structure a research project, and it produced clean, self-documenting artifacts.
@@ -49,7 +50,8 @@ submit/poll` just worked, uploads and background polling behaved exactly as the 
 3. **DataVoyager gave up on a multi-part question.** I asked for (1) passive params, (2) spike
    metrics, (3) low-pass consistency. It answered (1) and (3) and then returned:
    *"I'm sorry, but I can't fully answer your question right now… you will need to add that step."*
-   It ran only ~15 notebook cells and stopped before the spike detection it had itself planned.
+   It ran only ~15 notebook cells; it even wrote spike-detection code (a `programmer` cell) but never
+   delivered the requested spike metrics (rate, threshold, reset) and said so in its final answer.
    A single, tightly-scoped question would likely have completed; the skill could warn that
    multi-part asks are fragile, or itself decompose them and loop until all parts are covered.
 
@@ -60,11 +62,13 @@ submit/poll` just worked, uploads and background polling behaved exactly as the 
    to know to invoke; a completed `analyze-data` run does not, by itself, drop a readable summary or
    the figures next to my project.
 
-5. **Skill outputs are fragile if they live in untracked/ignored files.** Mid-run, the repo's
-   untracked/ignored files were cleaned (a maintainer reset), which removed my virtualenv and my
-   scratch working code. Not an Asta bug, but it argues that skills which generate working artifacts
-   should prefer a committed, discoverable location (or say so), because "it's in scratch/" is not
-   durable.
+5. **Committed deliverables are what survive; skill/working outputs off the tracked tree are not
+   guaranteed to.** Mid-run a maintainer reset the git history to a single commit — my earlier commit
+   was gone, `index.qmd`/`references.bib`/`.gitignore` reverted, and my virtualenv had to be rebuilt.
+   My untracked/ignored working files (`scratch/`, `model/`) happened to survive this particular
+   reset, but my *committed* work had been replaced. Not an Asta bug, but it made the lesson concrete:
+   deliverables must be committed (I re-committed `model/` and `predictions/` immediately afterward),
+   and skills that generate durable artifacts should prefer a committed, discoverable location.
 
 ## Skills I skipped, and why (honest)
 
@@ -95,7 +99,7 @@ submit/poll` just worked, uploads and background polling behaved exactly as the 
   raw notebook log; export is a second skill.
 - **Suggested changes:** (a) document a `--yes`/`--non-interactive` submit path; (b) either warn that
   multi-part questions are fragile or have the agent decompose-and-loop until every requested part is
-  answered (it planned the spike step and then skipped it); (c) on `completed`, auto-emit a short
+  answered (it started the spike step in code but never returned its metrics); (c) on `completed`, auto-emit a short
   `answer.md` + extracted figures alongside the task JSON so the findings are readable without
   hand-parsing `logs`, rather than requiring a separate Artifacts export.
 
@@ -120,5 +124,5 @@ question and left the findings in a form I had to dig through. The **`asta-assis
 a good scaffold whose control flow is built around human review; without a reviewer it becomes
 paperwork to route around rather than a driver. The most valuable single improvement across the suite
 would be first-class **non-interactive / autonomous modes** (skip confirmations, collapse review
-gates, override output names), since every skill I touched assumed a human was waiting to approve the
-next step.
+gates, override output names), since nearly every interactive skill I touched assumed a human was
+waiting to approve the next step.
