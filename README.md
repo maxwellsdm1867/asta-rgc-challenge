@@ -15,6 +15,11 @@ recovered from injected current `I(t)` and validated on held-out data — four b
 
 ---
 
+**See it, in order** → **[1 · Report](https://maxwellsdm1867.github.io/asta-rgc-challenge/report.html)**
+(how the equation was found) → **[2 · The answer](model/params.json)** (the equation + fitted
+parameters) → **[3 · Full trace](trace.tar.gz)** (the complete session trajectory — every tool call
+and the agent's reasoning, so anyone can see exactly how it was derived).
+
 > **Results in one line** *(skip if you just want the files)* — the answer is a **Generalized
 > Integrate-and-Fire (GIF)** model; held-out **Victor–Purpura distance = 2.91 / s (q = 4)**,
 > subthreshold **R² = 0.87**. The full equation, fitted parameters, and per-condition metrics live in
@@ -51,7 +56,9 @@ recovered from injected current `I(t)` and validated on held-out data — four b
 | path | what it is |
 |---|---|
 | [`mission.md`](mission.md) | the task spec |
+| [`trace.tar.gz`](trace.tar.gz) | **full session trajectory** — every tool call + the agent's reasoning (the challenge-format trace; ~11 MB) |
 | [`SKILLS_FEEDBACK.md`](SKILLS_FEEDBACK.md) | reflection on the Asta skills (tools, not science) |
+| [`FEEDBACK_AUDIT.md`](FEEDBACK_AUDIT.md) | per-claim citations grounding `SKILLS_FEEDBACK.md` against the trace |
 | [`RESEARCH_CHALLENGE.md`](RESEARCH_CHALLENGE.md) · [`SUBMISSION.md`](SUBMISSION.md) | challenge write-up + submission-form draft |
 
 > **Run it** *(skip unless reproducing)* — clean venv (`python3 -m venv venv && source venv/bin/activate`;
