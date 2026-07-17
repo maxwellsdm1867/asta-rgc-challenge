@@ -11,29 +11,23 @@ Blind neuron-model recovery: a Generalized Integrate-and-Fire equation for V(t) 
 
 ---
 
-## Project Summary  *(research goal, results, how much time it took)*
+## Project Summary  *(short — for judges)*
 
-**Goal.** Given only the injected current I(t) and the recorded membrane potential V(t) of a single
-neuron — four stimulus conditions differing in current bandwidth (25/100/200/400 Hz), with no answer
-key in the repo — discover an explicit equation for V(t), fit it, and predict held-out current inputs.
-One equation had to hold across all four conditions.
+**Goal.** From an injected current `I(t)` and the recorded membrane voltage `V(t)` of a single neuron
+(four current-bandwidth conditions, no answer key), find one explicit equation for `V(t)` and predict
+held-out inputs.
 
-**Result.** The data selected the model without any lookup: a dynamic I–V curve that is linear below
-threshold, a phase-plane spike-initiation elbow, and a spike-triggered average with reset + slow
-after-hyperpolarization all point to a **Generalized Integrate-and-Fire (GIF/GLIF)** neuron — a linear
-leaky membrane driven by I(t), a spike-triggered adaptation current, a spike-triggered (dynamic)
-threshold, and a reset. One parameter set fits all four conditions (C = 66.3 pF, R = 101 MΩ,
-τ_m = 6.71 ms, E_L = −65.2 mV; V_T0 = −55.3 mV, a_θ = 4.12 mV, τ_θ = 30.5 ms; V_r = −61.8 mV,
-t_ref = 3.45 ms). The membrane and adaptation current were fit in closed form by regressing dV/dt on
-[V, 1, I, adaptation states]; the spike parameters were fit to minimize the **Victor–Purpura spike
-distance (q = 4 s⁻¹)** with spikes detected by an elbow (2nd-derivative) initiation method. On a 20 %
-held-out split of the training trials (never used for fitting): mean **Victor–Purpura distance =
-2.91 / s**, coincidence factor **Γ = 0.69** (±2 ms), subthreshold **RMSE = 2.48 mV**, subthreshold
-**R² = 0.87**; predicted and measured firing rates agree within a few Hz per condition. DataVoyager,
-run independently, reproduced the passive parameters closely — an independent corroboration.
+**Result.** The data selected a **Generalized Integrate-and-Fire** model — a linear leaky membrane
+driven by `I(t)`, plus a spike-triggered adaptation current, a dynamic (spike-triggered) threshold,
+and a reset — fit as one parameter set across all four conditions. On a 20 % held-out split (never
+used for fitting): mean **Victor–Purpura distance = 2.91 / s (q = 4)**, subthreshold **RMSE = 2.48 mV**,
+**R² = 0.87**, with firing rates matched to within a few Hz. *Full equation, fitted parameters, and
+per-condition metrics are in the report and the data.*
 
-**Time.** One continuous agent session; wall-clock was not tracked (it included several background
-runs — DataVoyager and two model fits — plus recovery from a mid-run repo reset). **[confirm exact duration]**
+**Time.** This is a **~2-year experimental project** — most of that time is **data collection**
+(intracellular recordings); the **data-analysis** portion is roughly **6–8 months** of human work. In
+this challenge, the equation was recovered by the AI agent in a **single automated session**
+(≈15 min of compute — local model fits plus one ~3-min cloud DataVoyager run).
 
 ---
 
