@@ -15,10 +15,17 @@ recovered from injected current `I(t)` and validated on held-out data — four b
 
 ---
 
-**See it, in order** → **[1 · Report](https://maxwellsdm1867.github.io/asta-rgc-challenge/report.html)**
+> ### 🛠️ Building the Asta skills? Start here.
+> This challenge was **solved *with* the Asta skills**, so the most useful parts for tool development come first:
+> 1. **[`SKILLS_FEEDBACK.md`](SKILLS_FEEDBACK.md)** — honest, tools-only reflection: what worked, what was clunky or incomplete, which skills were skipped and why, and concrete **per-skill fixes**.
+> 2. **[`FEEDBACK_AUDIT.md`](FEEDBACK_AUDIT.md)** — every feedback claim **cite-checked** against the actual session (0 unsupported; each claim → the exact tool call that backs it).
+> 3. **[`trace.tar.gz`](trace.tar.gz)** — the **full session trajectory**: every tool call and the agent's reasoning at each step, so you can see exactly how the skills behaved.
+>
+> *The science — the recovered equation and how it was found — is below.*
+
+**The science, in order** → **[1 · Report](https://maxwellsdm1867.github.io/asta-rgc-challenge/report.html)**
 (how the equation was found) → **[2 · The answer](model/params.json)** (the equation + fitted
-parameters) → **[3 · Full trace](trace.tar.gz)** (the complete session trajectory — every tool call
-and the agent's reasoning, so anyone can see exactly how it was derived).
+parameters) → **[3 · Full trace](trace.tar.gz)** (the same trajectory, for the derivation itself).
 
 > **Results in one line** *(skip if you just want the files)* — the answer is a **Generalized
 > Integrate-and-Fire (GIF)** model; held-out **Victor–Purpura distance = 2.91 / s (q = 4)**,
